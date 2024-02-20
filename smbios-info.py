@@ -12,6 +12,8 @@ def read_dev_mem(address: int, size: int) -> bytes:
     return mem_bytes
 
 def find_smbios_entrypoint() -> int | None:
+    # SMBIOS entrypoint is somewhere inbetween
+    # the address range 0xF0000 to 0xFFFFF
     for addr in range(0xF0000, 0x100000, 4):
         signature = read_dev_mem(addr, 4)
         if signature == b'_SM_':
