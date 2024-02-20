@@ -22,8 +22,8 @@ def find_smbios_entrypoint() -> int | None:
 
     return None
 
-def compute_checksum(data: bytes) -> bool:
-    return (sum(data) & 0xFF) == 0
+def compute_checksum(data: bytes) -> int:
+    return (sum(data) & 0xFF)
 
 def get_header_length(entrypoint: int) -> int:
     length = read_dev_mem(entrypoint + 5, 1)
@@ -35,7 +35,7 @@ def verify_checksum(entrypoint: int) -> bool:
 
     print(f"SMBIOS Header Length: {length} bytes")
     data = read_dev_mem(entrypoint, length)
-    return compute_checksum(data[::-1])
+    return compute_checksum(data[::-1]) == 0
 
 def smbios_dump_header(entrypoint: int):
     hdr_len = get_header_length(entrypoint)
